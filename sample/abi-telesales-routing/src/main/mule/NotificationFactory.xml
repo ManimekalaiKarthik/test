@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<sub-flow name="SuccessNotification" doc:id="41b0e09a-a9da-4de0-89d1-e15705f1184f" >
+		<logger level="INFO" doc:name="Logger" doc:id="b3740b29-f14e-4d5d-9ca6-6abc6e46a465" message="NotificationSuccess - sending success notification" />
+		<parse-template doc:name="Parse Success Template" doc:id="c7961e4b-e230-4ac3-a232-cb11938c0883" location="success.html" />
+		<email:send doc:name="Copy_of_Send" doc:id="cbbae79f-b82e-416c-8a24-0c39aab0a1b2" config-ref="Email_SMTP" fromAddress="${notification.support.from}" subject="${notification.support.subject}" >
+			<email:to-addresses >
+				<email:to-address value="${notification.support.to}" />
+			</email:to-addresses>
+			<email:body contentType="text/html" />
+		</email:send>
+	</sub-flow>
+	<sub-flow name="errorNotification" doc:id="dd7ac21e-1017-46f8-ab39-1c755ab3b6de" >
+		<logger level="INFO" doc:name="Logger" doc:id="201e3fbc-c41e-4a95-a73e-66e75abb17a2" message="ErrorNotification - An Unhandled error has occured, sending error notification" />
+		<parse-template doc:name="Parse error Template" doc:id="c9323988-d1e6-4b12-844d-3d6fad5acbd7" location="error.html" />
+		<email:send doc:name="Send" doc:id="3134ab2f-5807-4958-a7b0-42f5a2f1a8aa" config-ref="Email_SMTP" fromAddress="${notification.support.from}" subject="${notification.support.subject}" >
+			<email:to-addresses >
+				<email:to-address value="${notification.support.to}" />
+			</email:to-addresses>
+			<email:body contentType="text/html" />
+		</email:send>
+	</sub-flow>
+	<sub-flow name="MuleErrorNotification" doc:id="cac7446e-12c2-403e-9900-6fdba27504b8" >
+		<logger level="INFO" doc:name="Logger" doc:id="cbebc523-a659-48ef-8898-c0dc9eb86eef" message="MuleErrorNotification - A Mule Expression error has occured, sending error notification" />
+		<parse-template doc:name="Parse MuleError Template" doc:id="99756079-f4b6-4e5e-bddc-952e3f4d3ded" location="MuleError.html" />
+		<email:send doc:name="Send" doc:id="552add31-0339-4b90-abe1-4155c83cf2f1" config-ref="Email_SMTP" fromAddress="${notification.support.from}" subject="${notification.support.subject}" >
+			<email:to-addresses >
+				<email:to-address value="${notification.support.to}" />
+			</email:to-addresses>
+			<email:body contentType="text/html" />
+		</email:send>
+	</sub-flow>
+	<sub-flow name="SalesforceErrorNotification" doc:id="2488dfc0-7701-4a6c-adb2-c2d6e03f3b61" >
+		<logger level="INFO" doc:name="Logger" doc:id="89b507e3-ed40-46ac-91f6-378b187843b7" message="ErrorNotification - An Salesforce error has occured, sending error notification" />
+		<parse-template doc:name="Parse SalesforceError Template" doc:id="da576668-75c0-4780-a7f3-7b1c87244f73" location="SalesforceError.html" />
+		<email:send doc:name="Send" doc:id="258b007c-cdb9-4701-b958-17bd9cba70cd" config-ref="Email_SMTP" fromAddress="${notification.support.from}" subject="${notification.support.subject}" >
+			<email:to-addresses >
+				<email:to-address value="${notification.support.to}" />
+			</email:to-addresses>
+			<email:body contentType="text/html" />
+		</email:send>
+	</sub-flow>
+		
+</mule>

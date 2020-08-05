@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	 <http:listener-config name="abi-telesales-api-httpListenerConfig">
+        <http:listener-connection host="${http.telesale.host}" port="${http.telesale.port}" />
+    </http:listener-config>
+    
+    <apikit:config name="abi-telesales-api-config" api="abi-telesales-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+   <http:listener-config name="abid-readvip-api-httpListenerConfig">
+        <http:listener-connection host="${http.readvip.host}" port="${http.readvip.port}" />
+    </http:listener-config>
+    <apikit:config name="abid-readvip-api-config" api="abid-readvip-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<configuration-properties doc:name="Configuration properties" doc:id="93c85365-9f31-4110-8982-e4ecae18ecf0" file="${env}.properties" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="56b68f75-36ff-4fc9-9bb3-860ebd3484a1" file="${env}Secure.properties" key="${key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="b1eae3a9-d0f3-4f2e-b942-52fcd55b3d14" >
+		<email:smtp-connection host="${smtp.host}" port="${smtp.port}" >
+			<reconnection >
+				<reconnect frequency="${smtp.reconnection.frequency}" count="${smtp.reconnection.attempts}" />
+			</reconnection>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="32d0ed8e-72da-41e5-91f0-2fcb0f1b707c" >
+		<salesforce:basic-connection username="${sfdc.username}" password="${sfdc.password}" securityToken="${sfdc.securityToken}" url="${sfdc.url}" />
+	</salesforce:sfdc-config>
+	
+   
+</mule>
